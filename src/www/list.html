@@ -9,19 +9,19 @@
         <title>Simple Reader</title>
     </head>
     <body>
-        <div class="app">
-            <h1>Simple Reader</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Loading</p>
-                <p class="event received">Ready</p>
-            </div>
+        <div class="list">
+          <ul data-role="listview">
+	            <li><a href="acura.html">Acura</a></li>
+	            <li><a href="audi.html">Audi</a></li>
+	            <li><a href="bmw.html">BMW</a></li>
+          </ul>
         </div>
         <script type="text/javascript" src="phonegap.js"></script>
         <script type="text/javascript" src="js/jquery-2.1.1.min.js"></script>
-        <script type="text/javascript" src="js/jquery.mobile-1.4.2.min"></script>        
+        <script type="text/javascript" src="js/jquery.mobile-1.4.2.min.js"></script>        
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
-            appIndex.initialize();
+            appList.initialize();
         </script>
     </body>
 </html>
