@@ -159,7 +159,7 @@ public class Main extends ActionBarActivity implements
 
 			final FeedHelper feedHelper = new FeedHelper(this.activity, lstFeed);
 
-			feedHelper.getFeed("http://apps.mrlatte.net/api/reader.json");
+			feedHelper.getFeed("http://apps.mrlatte.net/api/feeds.json");
 
 			lstFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
