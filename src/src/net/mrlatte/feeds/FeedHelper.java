@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -16,37 +19,47 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class FeedHelper {
 	private Activity activity;
 	private ListView listView;
-	private ArrayAdapter<String> adapter;
-	private ArrayList<String> listItems = new ArrayList<String>();
-	private ArrayList<String> listLinks = new ArrayList<String>();
-
+	private SimpleAdapter adapter;
+	private List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+//	private ArrayList<String> listItems = new ArrayList<String>();
+//	private ArrayList<String> listLinks = new ArrayList<String>();
+	private Toast toast;
+	
 	public FeedHelper(Activity activity, ListView listView) {
 		this.activity = activity;
 		this.listView = listView;
 
-		this.adapter = new ArrayAdapter<String>(activity.getBaseContext(),
-				android.R.layout.simple_list_item_1, listItems);
-
+		this.adapter = new SimpleAdapter(activity.getBaseContext(), data,
+                android.R.layout.simple_list_item_2,
+                new String[] {"title", "date"},
+                new int[] {android.R.id.text1,
+                           android.R.id.text2});
+		
 		listView.setAdapter(adapter);
 	}
 
 	public String getLink(int index) {
-		if (this.listLinks.size() > index) {
-			return this.listLinks.get(index);
+		if (this.data.size() > index) {
+			return this.data.get(index).get("link");
 		}
 
 		return null;
 	}
 
 	public void getFeed(String url) {
+		toast = Toast.makeText(activity.getBaseContext(), "Loading...",
+				Toast.LENGTH_SHORT);
+		
+		toast.show();
 		new HttpAsyncTask().execute(url);
+		
 	}
 
 	private String getData(String url) {
@@ -99,9 +112,6 @@ public class FeedHelper {
 
 		@Override
 		protected void onPostExecute(String result) {
-			Toast.makeText(activity.getBaseContext(), "Received!",
-					Toast.LENGTH_LONG).show();
-
 			try {
 				JSONObject obj = new JSONObject(result);
 				JSONArray entries = (JSONArray) ((JSONObject) ((JSONObject) ((JSONObject) obj
@@ -110,11 +120,11 @@ public class FeedHelper {
 
 				for (int i = 0; i < entries.length(); ++i) {
 					JSONObject entry = (JSONObject) entries.get(i);
-					String title = (String) entry.get("title");
-					String link = (String) entry.get("link");
-
-					listItems.add(title);
-					listLinks.add(link);
+					Map<String, String> datum = new HashMap<String, String>(3);
+				    datum.put("title", (String) entry.get("title"));
+				    datum.put("date", (String) entry.get("publishedDate"));
+				    datum.put("link", (String) entry.get("link"));
+				    data.add(datum);
 
 					adapter.notifyDataSetChanged();
 				}
@@ -122,6 +132,12 @@ public class FeedHelper {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+			
+			toast.cancel();
+			
+			Toast.makeText(activity.getBaseContext(), "Complete",
+					Toast.LENGTH_SHORT).show();
+			
 			// etResponse.setText(result);
 		}
 	}

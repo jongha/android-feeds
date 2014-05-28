@@ -51,12 +51,27 @@ public class Main extends ActionBarActivity implements
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
+
+		String url = null;
+		switch (position + 1) {
+		case 1:
+			url = getString(R.string.feed_url1);
+			break;
+		case 2:
+			url = getString(R.string.feed_url2);
+			break;
+		case 3:
+			url = getString(R.string.feed_url3);
+			break;			
+		}
+
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager
 				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(this, position + 1))
-				.commit();
+				.replace(
+						R.id.container,
+						PlaceholderFragment
+								.newInstance(this, position + 1, url)).commit();
 	}
 
 	public boolean isConnected() {
@@ -71,14 +86,14 @@ public class Main extends ActionBarActivity implements
 	public void onSectionAttached(int number) {
 		switch (number) {
 		case 1:
-			mTitle = getString(R.string.title_news);
+			mTitle = getString(R.string.feed_name1);
 			break;
-		// case 2:
-		// mTitle = getString(R.string.title_section2);
-		// break;
-		// case 3:
-		// mTitle = getString(R.string.title_section3);
-		// break;
+		case 2:
+			mTitle = getString(R.string.feed_name2);
+			break;
+		case 3:
+			mTitle = getString(R.string.feed_name3);
+			break;			
 		}
 	}
 
@@ -124,17 +139,21 @@ public class Main extends ActionBarActivity implements
 		 */
 		private static final String ARG_SECTION_NUMBER = "section_number";
 		private Activity activity;
+		private String url;
 
 		/**
 		 * Returns a new instance of this fragment for the given section number.
 		 */
 		public static PlaceholderFragment newInstance(Activity activity,
-				int sectionNumber) {
+				int sectionNumber, String mUrl) {
+
 			PlaceholderFragment fragment = new PlaceholderFragment();
 			Bundle args = new Bundle();
 			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+
 			fragment.setArguments(args);
 			fragment.activity = activity;
+			fragment.url = mUrl;
 
 			return fragment;
 		}
@@ -157,29 +176,34 @@ public class Main extends ActionBarActivity implements
 
 			ListView lstFeed = (ListView) rootView.findViewById(R.id.lstFeed);
 
-			final FeedHelper feedHelper = new FeedHelper(this.activity, lstFeed);
+			if (url != null) {
+				final FeedHelper feedHelper = new FeedHelper(this.activity,
+						lstFeed);
 
-			feedHelper.getFeed("http://apps.mrlatte.net/api/feeds.json");
+				feedHelper
+						.getFeed("http://apps.mrlatte.net/api/feeds.json?url="
+								+ url);
 
-			lstFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+				lstFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long arg3) {
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1,
+							int position, long arg3) {
 
-					Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
-							.parse(feedHelper.getLink(position)));
+						Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+								Uri.parse(feedHelper.getLink(position)));
 
-					startActivity(browserIntent);
-
-					// Object o = lv.getItemAtPosition(position);
-					/*
-					 * write you handling code like... String st = "sdcard/";
-					 * File f = new File(st+o.toString()); // do whatever u want
-					 * to do with 'f' File object
-					 */
-				}
-			});
+						startActivity(browserIntent);
+						
+						// Object o = lv.getItemAtPosition(position);
+						/*
+						 * write you handling code like... String st =
+						 * "sdcard/"; File f = new File(st+o.toString()); // do
+						 * whatever u want to do with 'f' File object
+						 */
+					}
+				});
+			}
 
 			return rootView;
 		}
