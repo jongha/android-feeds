@@ -6,13 +6,19 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
-    
     <string name="feed_name1">Hacker News</string>
-    <string name="feed_url1">https://news.ycombinator.com/rss</string>
-    
     <string name="feed_name2">마이크로소프트웨어</string>
-    <string name="feed_url2">http://feeds.feedburner.com/co/rAXs</string>
-    
     <string name="feed_name3">Blog by Jong-Ha Ahn</string>
+    <string name="feed_name4">Smashing Magazine</string>
+    <string name="feed_name5">Daily Nerd</string>
+    <string name="feed_name6">456 Berea Street</string>
+    <string name="feed_name7">Mozilla Hacks</string>
+    <string name="feed_url1">https://news.ycombinator.com/rss</string>
+    <string name="feed_url2">http://feeds.feedburner.com/co/rAXs</string>
     <string name="feed_url3">http://blog.mrlatte.net/feeds/posts/default</string>
+    <string name="feed_url4">http://www.smashingmagazine.com/feed/</string>
+    <string name="feed_url5">http://dailynerd.nl/feed/</string>
+    <string name="feed_url6">http://feeds.feedburner.com/456bereastreet</string>
+    <string name="feed_url7">https://hacks.mozilla.org/feed/</string>
+    <string name="title_activity_splash">Splash</string>
 </resources>

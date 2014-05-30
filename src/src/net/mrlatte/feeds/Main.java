@@ -62,7 +62,19 @@ public class Main extends ActionBarActivity implements
 			break;
 		case 3:
 			url = getString(R.string.feed_url3);
-			break;			
+			break;
+		case 4:
+			url = getString(R.string.feed_url4);
+			break;
+		case 5:
+			url = getString(R.string.feed_url5);
+			break;
+		case 6:
+			url = getString(R.string.feed_url6);
+			break;
+		case 7:
+			url = getString(R.string.feed_url7);
+			break;
 		}
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
@@ -93,7 +105,19 @@ public class Main extends ActionBarActivity implements
 			break;
 		case 3:
 			mTitle = getString(R.string.feed_name3);
-			break;			
+			break;
+		case 4:
+			mTitle = getString(R.string.feed_name4);
+			break;
+		case 5:
+			mTitle = getString(R.string.feed_name5);
+			break;
+		case 6:
+			mTitle = getString(R.string.feed_name6);
+			break;
+		case 7:
+			mTitle = getString(R.string.feed_name7);
+			break;
 		}
 	}
 
@@ -194,7 +218,7 @@ public class Main extends ActionBarActivity implements
 								Uri.parse(feedHelper.getLink(position)));
 
 						startActivity(browserIntent);
-						
+
 						// Object o = lv.getItemAtPosition(position);
 						/*
 						 * write you handling code like... String st =
