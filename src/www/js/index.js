@@ -86,7 +86,7 @@ var app = {
 
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
-        parentElement.querySelector('.listening').setAttribute('style', 'display:none;');
+        parentElement.querySelector('.app').setAttribute('style', 'display:none;');
         
         console.log('Received Event: ' + id);
         
