@@ -1,7 +1,10 @@
-var loadFeeds = function() {
+var pageLoad = function() {
     Ext.setup({
+
         onReady: function() {
-            var store = new Ext.data.JsonStore({
+            var tags = 'software,rss';
+            
+            var store = Ext.create('Ext.data.Store', {
                 fields: ['title', 'link', 'author', 'publishedDate'],
                 data: [],
                 grouper: {
@@ -9,6 +12,41 @@ var loadFeeds = function() {
                         return prettyDate(record.get('publishedDate'));
                     }
                 }
+            });
+
+            Ext.define('Feeds.plugin.PullRefresh', {
+                extend: 'Ext.plugin.PullRefresh',
+                fetchLatest: function() {
+                    var that = this;
+                    loadFeed(
+                        tags,
+                        {
+                            masked: false,
+                            callback: function(data) {
+                                var store = that.getList().getStore(),
+                                    proxy = store.getProxy(),
+                                    operation;
+
+                                store.loadData([],false);
+                                for(var i=0; i<data.output.length; ++i) {
+                                    store.add(data.output[i].responseData.feed.entries);
+                                }
+
+                                operation = Ext.create('Ext.data.Operation', {
+                                    page: 1,
+                                    start: 0,
+                                    model: store.getModel(),
+                                    limit: store.getPageSize(),
+                                    action: 'read',
+                                    sorters: store.getSorters(),
+                                    filters: store.getRemoteFilter() ? store.getFilters() : []
+                                });
+
+                                proxy.read(operation, that.onLatestFetched, that);
+                            }
+                        }
+                    );
+                },
             });
 
             Ext.create('Ext.dataview.List', {
@@ -26,43 +64,60 @@ var loadFeeds = function() {
                 },
 
                 plugins: [
-                    /*{
-                        xclass: 'pullrefreshoverride',
-                        pullText: 'Pull down for more new Feeds!',
-                    }*/
+                    {
+                        xclass: 'Feeds.plugin.PullRefresh',
+                    }
                 ],
             });
 
-            
-            var loadFeed = function(url) {
-                Ext.Viewport.setMasked(
-                    {
-                        xtype: 'loadmask',
-                        message: 'Please wait...'
-                    }
-                );
-                
+
+            var loadFeed = function(tags, config) {
+                config = config || { masked: true, callback: null };
+
+                if(config.masked) {
+                    Ext.Viewport.setMasked(
+                        {
+                            xtype: 'loadmask',
+                            message: 'Please wait...'
+                        }
+                    );
+                }
+
                 Ext.data.JsonP.request({
                     url: 'http://apps.mrlatte.net/api/feeds.json',
                     callbackKey: 'callback',
                     method: 'GET',
                     params: {
-                        url: url
+                        tags: tags
                     },
-                    
+
                     callback: function(successful, data) {
-                        store.add(data.output.responseData.feed.entries);
+                        if(config && config.callback) {
+                            config.callback(data);
+                        }
 
                         //for(var i=pnl.getItems().length-1; i>1; --i) {
                         //    pnl.removeAt(i);
                         //}
 
-                        Ext.Viewport.setMasked(false);
+                        if(config.masked) {
+                            Ext.Viewport.setMasked(false);
+                        }
                     }
                 });
             };
-       
-            loadFeed('http://blog.mrlatte.net/feeds/posts/default');
+
+            loadFeed(
+                tags,
+                {
+                    masked: true,
+                    callback: function(data) {
+                        for(var i=0; i<data.output.length; ++i) {
+                            store.add(data.output[i].responseData.feed.entries);
+                        }
+                    }
+                }
+            );
         }
     });
 };
@@ -72,7 +127,7 @@ var app = {
     initialize: function() {
         this.bindEvents();
 
-        loadFeeds();
+        pageLoad();
     },
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
