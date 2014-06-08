@@ -1,4 +1,4 @@
-var tags = 'software';
+var tags = 'technology';
 var loadFeed = function(tags, config) {
     config = config || { masked: true, callback: null };
 
@@ -16,7 +16,9 @@ var loadFeed = function(tags, config) {
         callbackKey: 'callback',
         method: 'GET',
         params: {
-            tags: tags
+            tags: tags,
+            entries: 'title,link,author,publishedDate',
+            count: 10,
         },
 
         callback: function(successful, data) {
