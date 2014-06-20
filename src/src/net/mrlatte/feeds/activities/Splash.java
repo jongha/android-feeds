@@ -1,5 +1,7 @@
-package net.mrlatte.feeds;
+package net.mrlatte.feeds.activities;
 
+import net.mrlatte.feeds.R;
+import net.mrlatte.feeds.R.layout;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +21,8 @@ public class Splash extends Activity {
 			public void run() {
 				Intent intent = new Intent(Splash.this, Main.class);
 				startActivity(intent);
+
+				finish();
 			}
 		}, SPLASH_TIME_OUT);
 	}

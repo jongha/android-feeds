@@ -1,5 +1,10 @@
-package net.mrlatte.feeds;
+package net.mrlatte.feeds.util;
 
+import net.mrlatte.feeds.R;
+import net.mrlatte.feeds.R.drawable;
+import net.mrlatte.feeds.R.layout;
+import net.mrlatte.feeds.R.menu;
+import net.mrlatte.feeds.R.string;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -120,7 +125,8 @@ public class NavigationDrawerFragment extends Fragment {
 						getString(R.string.feed_name4),
 						getString(R.string.feed_name5),
 						getString(R.string.feed_name6),
-						getString(R.string.feed_name7), }));
+						getString(R.string.feed_name7), 
+						}));
 
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;

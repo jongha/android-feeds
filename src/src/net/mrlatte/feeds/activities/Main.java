@@ -1,5 +1,8 @@
-package net.mrlatte.feeds;
+package net.mrlatte.feeds.activities;
 
+import net.mrlatte.feeds.R;
+import net.mrlatte.feeds.feeding.FeedProxy;
+import net.mrlatte.feeds.util.NavigationDrawerFragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -18,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 public class Main extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -41,6 +45,7 @@ public class Main extends ActionBarActivity implements
 
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
+
 		mTitle = getTitle();
 
 		// Set up the drawer.
@@ -201,8 +206,9 @@ public class Main extends ActionBarActivity implements
 			ListView lstFeed = (ListView) rootView.findViewById(R.id.lstFeed);
 
 			if (url != null) {
-				final FeedHelper feedHelper = new FeedHelper(this.activity,
-						lstFeed);
+				final FeedProxy feedHelper = new FeedProxy(this.activity,
+						lstFeed,
+						(ProgressBar) rootView.findViewById(R.id.progressBar));
 
 				feedHelper
 						.getFeed("http://apps.mrlatte.net/api/feeds.json?url="
